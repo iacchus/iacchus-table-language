@@ -3,6 +3,23 @@
 import re
 import shlex
 
+# preprocessor deals with sanitizing the input
+# preprocessor:
+#   checks for header
+#   preprocesses header
+#   removes the header line
+#   remove # comments
+#   remove empty lines
+#   checks for indentation
+#   delivers to parser a organized block to be processed
+#
+# # parser deals with processing the sanitized input
+# parser:
+#   parses given the header info by preprocessor
+#   parses indentation
+#   parses especial characters
+#   mount the columns with the header data given to it
+
 FILENAME = "test.itl"
 with open(FILENAME, "r") as fd:
 #     data = fd.readlines()
@@ -19,13 +36,13 @@ groupno = 0
 
 for lineno, line in enumerate(LINES):
 
-#     if lineno == 0:
-#         print(shlex.split(line))
-#         if re.match('^itbl ', line):
-#             continue
-#         else:
-#             print('Not a legitimate ITML table. Exiting.')
-#             exit(1)
+    if lineno == 0:
+        print(shlex.split(line))
+        if re.match('^itbl ', line):
+            continue
+        else:
+            print('Not a legitimate ITML table. Exiting.')
+            exit(1)
 
     match = re.match(r'^([ ]*)([\w\W]*)', line)
     line_indent = len(match[1])
@@ -48,10 +65,18 @@ for lineno, line in enumerate(LINES):
             groups[groupno].append(line_contents)
 
         else:
-            print(f"Invalid indentation at line {lineno-1}.")
+            print(f"Invalid indentation at line {lineno+1}.")
             exit(2)
             pass  # invalid indent!
 
     print(format(len(match[1]), "02d"), format(len(match[2]),"02d"), line)
 
 print(groups)
+
+print(groups.values())
+
+for key, value in groups.items():
+    groups.update({key: " ".join(value)})
+    print(key, groups[key])
+
+# print(groups)
