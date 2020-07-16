@@ -46,7 +46,6 @@ class ITMLPreprocessor:
 
 
         lines = [line.expandtabs() for line in data]
-
         self.lines = lines
 
 
@@ -63,7 +62,6 @@ class ITMLPreprocessor:
             #match = re.match(r'^(?P<blanks>[ ]*)(?P<text>[^\n]*)(?P<newline>)', line)
             match = re.match(r'^(?P<blanks>[ ]*)(?P<text>[\w\W]*)', line)
             matches = match.groupdict()
-            print(matches)
 
             line_indent = len(matches['blanks'])
             line_contents = matches['text']
@@ -71,26 +69,25 @@ class ITMLPreprocessor:
 
             if blank_line:
 
-               if indent > 0:  # two subsequent newlines separate paragraphs
+                if indent > 0:  # two subsequent newlines separate paragraphs
                                # when the text is indented
                     groups[groupno].append(line_contents)
 
-            else:  # line has text
+            # line has text
+            elif line_indent == 0:
+                groupno += 1
+                groups.update({groupno: list() })
+                groups[groupno].append(line_contents)
+                #indent = line_indent  # new indent
+                indent = 0  # new indent
 
-                if line_indent == 0:
-                    groupno += 1
-                    groups.update({groupno: list() })
-                    groups[groupno].append(line_contents)
-                    #indent = line_indent  # new indent
-                    indent = 0  # new indent
+            elif indent == 0 or line_indent == indent:
+                indent = line_indent  # new indent
+                groups[groupno].append(line_contents)
 
-                elif indent == 0 or line_indent == indent:
-                    indent = line_indent  # new indent
-                    groups[groupno].append(line_contents)
-
-                else:
-                    print(f"Invalid indentation at line {lineno+1}.")
-                    exit(2)
+            else:
+                print(f"Invalid indentation at line {lineno+1}.")
+                exit(2)
 
         self.groups = groups
         self.groupsno = len(groups)
