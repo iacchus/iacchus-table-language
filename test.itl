@@ -28,10 +28,10 @@ Porque a será entendido que a linha anterior possuia apenas uma linha,
     parecido com os heredocs """heredoc""" do Python.
 
     O texto da coluna anterior renderizará apenas uma linha com UM ESPAÇO, os
-    outros caracteres especiais como NEWLINE e MULTIPLOS ESPAÇÕS sendo
-    à apenas UM ESPEÇOreduzidos, a não ser que a linha seja terminada com barr\
-    a, em cujo caso a linha anterior será unida com a linha atual sem adicionar
-    NENHUM ESPAÇO.
+    outros caracteres especiais como NEWLINE e MULTIPLOS ESPAÇOS sendo
+    reduzidos à apenas UM ESPEÇO, a não ser que a linha seja terminada com
+    barra, em cujo caso a linha anterior será unida com a linha atual sem adi\
+    cionar QUALQUER ESPAÇO.
     
 Para ser Future-proof, as especificações POSSIVELMENTE, ao menos ENQUANTO BETA,
     serão VERSIONADAS e suas implementações, no caso, deverão ser baseadas na

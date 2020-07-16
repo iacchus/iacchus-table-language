@@ -29,7 +29,7 @@ class ITMLPreprocessor:
     def __init__(self, text=None, filename=None):
 
         if filename:
-            with open(FILENAME, "r") as fd:
+            with open(filename, "r") as fd:
                 text = fd.readlines()
 
         if text:
@@ -44,31 +44,38 @@ class ITMLPreprocessor:
         elif isinstance(text, (list, tuple)):
             data = text
 
-        LINES = [line.expandtabs() for line in data]
 
-        if len(LINES) > 0:
-            header = LINES.pop(0)
-            match = re.match(r'^itbl ([\w\W]*)', header)
+        lines = [line.expandtabs() for line in data]
 
-        if len(match==2):
-            self.columns = shlex.split(match[2])
-            self.columnsno = len(self.columns)
+        self.lines = lines
 
-        elif not match:
-            #print('Not a legitimate ITML table. Exiting.')
+
+        if not self._process_header:
             raise('Not a legitimate ITML table (Header.) Exiting.')
 
         indent = 0
         groups = dict()
         groupno = 0
 
-        for lineno, line in enumerate(LINES):
+        for lineno, line in enumerate(lines):
 
-            match = re.match(r'^([ ]*)([\w\W]*)', line)
-            line_indent = len(match[1])
-            line_contents = match[2]
+            #match = re.match(r'^(?P<blanks>[ ]*)(?P<text>[\w\W]*)(?P<newline>)', line)
+            #match = re.match(r'^(?P<blanks>[ ]*)(?P<text>[^\n]*)(?P<newline>)', line)
+            match = re.match(r'^(?P<blanks>[ ]*)(?P<text>[\w\W]*)', line)
+            matches = match.groupdict()
+            print(matches)
 
-            if line_contents:
+            line_indent = len(matches['blanks'])
+            line_contents = matches['text']
+            blank_line = re.match('^[\n]$', line_contents)
+
+            if blank_line:
+
+               if indent > 0:  # two subsequent newlines separate paragraphs
+                               # when the text is indented
+                    groups[groupno].append(line_contents)
+
+            else:  # line has text
 
                 if line_indent == 0:
                     groupno += 1
@@ -88,4 +95,18 @@ class ITMLPreprocessor:
         self.groups = groups
         self.groupsno = len(groups)
 
+
+    def _process_header(self):
+
+        if len(self.lines) > 0:
+            match = re.match(r'^itbl ([\w\W]*)', self.lines[0])
+
+        if len(match.groups()) == 2:
+            self.columns = shlex.split(match[2])
+            self.columnsno = len(self.columns)
+
+        elif not match:
+            return False
+
+        return True
 
