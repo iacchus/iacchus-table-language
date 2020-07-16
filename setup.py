@@ -35,7 +35,7 @@ setup(
 
     # Author details
     author='Iacchus Mercurius',
-    author_email='kassivs.@gmail.com',
+    author_email='kass.ivs@gmail.com',
 
     # Choose your license
     #license='MIT',

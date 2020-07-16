@@ -56,3 +56,4 @@ Talvez, como no Markdown, caracteres específicos pudessem ter sentidos específ
 Talvez possamos criar variáveis e funcoes caso as tabelas sejam renderizadas
     localmente, e impedir certas características por segurança caso sejam
     renderizadas remotamente.
+# A especificação tera exigências e best-practices não-exigenciais.
