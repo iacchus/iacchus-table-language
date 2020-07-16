@@ -1,0 +1,58 @@
+itbl "coluna 1" coluna\ 2 coluna3
+
+Primeira linha de dados da coluna um
+Aqui é a coluna 2
+Isto está na coluna 3
+
+Este é o comeco da coluna um
+    e ela tem multiplos paragrafos, que são retornados como newlines. este é
+    apenas o primeiro paragrafo
+
+    este é o segundo paragrafo da primeira coluna
+
+    e este é o tercero paragrafo
+
+Depois de um `dedent`, um espaço vazio, ou mais de um espaços vazios entre as
+    colunas é ignorado, sendo contado o número de collunas pelo tamanho de
+    colunas existentes no header.
+Então este seria a terceira coluna. O(s) espaço(s) depois de um `dedent`,
+    apesar de ser aceitos, não são necessários.
+
+Uma especificação que temos em mente é o de utilizar a regra do python de que o
+    texto não deve ultrapassar 79 caracteres por llinha.
+
+Caso o indent da próxima linha seja o indent 0 (sem indentação)
+...o texto, aqui por exemplo, após o NEWLINE estará na próxima coluna.
+Porque a será entendido que a linha anterior possuia apenas uma linha,
+    coerentemente. Esse indent renderizará apenas UMA linha com UM ESPAÇO,
+    parecido com os heredocs """heredoc""" do Python.
+
+    O texto da coluna anterior renderizará apenas uma linha com UM ESPAÇO, os
+    outros caracteres especiais como NEWLINE e MULTIPLOS ESPAÇÕS sendo
+    à apenas UM ESPEÇOreduzidos, a não ser que a linha seja terminada com barr\
+    a, em cujo caso a linha anterior será unida com a linha atual sem adicionar
+    NENHUM ESPAÇO.
+    
+Para ser Future-proof, as especificações POSSIVELMENTE, ao menos ENQUANTO BETA,
+    serão VERSIONADAS e suas implementações, no caso, deverão ser baseadas na
+    VERSÃO do PADRÃO `itbl` `iacchus' table language.`
+""
+Um campo vazio pode ser representado por "". Talvez possamos usar "" para
+    evitar a necessidade de indentação de uma célula. o \" literal pode ser
+    escapado.
+
+# isto é um comentário
+Uma linha com um comentário VAZIA ou contendo APENAS ESPAÇOS antes do
+    comentário será descartada do parser.
+Um comentário após uma linha com texto, descartará do caractere de comentário,
+    inclusive, até o final da linha SEM RETIRAR O NEWLINE, que deverá ser
+    interpretado posteriormente pelo PARSER.
+Os comentários poderiam portanto ser vistos como
+
+Linhas vazias são insignificantes, mas são uma boa prática para distinguir uma
+    linha da tabela da outra.
+Talvez, como no Markdown, caracteres específicos pudessem ter sentidos específ\
+    icos.
+Talvez possamos criar variáveis e funcoes caso as tabelas sejam renderizadas
+    localmente, e impedir certas características por segurança caso sejam
+    renderizadas remotamente.
