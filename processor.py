@@ -44,6 +44,8 @@ class ITMLProcessor:
 
         for index, item in enumerate(self.item_list):
 
+            if index == 0:  # raw header line
+                continue
 
             parsed = self._process_text(item)
 
