@@ -65,22 +65,29 @@ class ITMLPreprocessor:
             line_contents = matches['text']
             blank_line = re.match('^[\n]$', line_contents)
 
+            # line is a comment; continue for loop
+            if re.match(r'^[\x20]*[#].*\n$', line_contents):
+                continue
+
+            # remove inline comments
+            parsed_line = re.sub(r'[\x20]*[#].*\n', '\n', line_contents)
+
             if blank_line:
 
                 if indent > 0:  # two subsequent newlines separate paragraphs
                                 # when the text is indented
-                    groups[groupno] += line_contents
+                    groups[groupno] += parsed_line
 
             # line has text
             elif line_indent == 0:
                 groupno += 1
-                groups.update({groupno: line_contents})
+                groups.update({groupno: parsed_line})
                 indent = 0  # new indent
 
             elif indent == 0 or line_indent == indent:
                 indent = line_indent  # new indent
-                #groups[groupno].append(line_contents)
-                groups[groupno] += line_contents
+                #groups[groupno].append(parsed_line)
+                groups[groupno] += parsed_line
 
             else:
                 print(f"Invalid indentation at line {lineno+1}.")

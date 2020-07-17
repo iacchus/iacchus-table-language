@@ -56,16 +56,8 @@ class ITMLProcessor:
 
         parsed = text
 
-        parsed = re.sub('[\n]*\n$', '', parsed)
+        parsed = re.sub(r'[\n]*\n$', '', parsed)
 
-        #parsed = re.sub(r'^[ ]*[#]+[.]*\n', '', parsed)
-        parsed = re.sub(r'^[ ]*[#].*$', '', parsed, flags=re.MULTILINE)
-        # comments on empty lines
-
-        #parsed = re.sub(r'[ ]*[#].*\n', '\n', parsed)  # comments after
-        #                                               # lines with text
-        parsed = re.sub(r'[ ]*[#].*', '', parsed)  # comments after
-                                                       # lines with text
 
 
         #parsed = re.sub(r'\n', '', parsed)  # removing trailing newlines, as
@@ -75,7 +67,10 @@ class ITMLProcessor:
         parsed = re.sub(r'\\[\x20]*\n', '', parsed)  # no ending whitespace
                                                      # after \ and newline
 
-        parsed = re.sub(r'(?!\n\n|\n$)\n', ' ', parsed)  # join continuing
+        #parsed = re.sub(r'(?!\n[\n]+|\n$)\n', '_', parsed,flags=re.MULTILINE)
+        #parsed = re.sub(r'^$', '_')
+        #parsed = re.sub(r'(.)\n(.)', r'\1 \2', parsed)  # join continuing
+        parsed = re.sub(r'(?<=.)\n(?=.)', r' ', parsed)  # join continuing
                                                          # (indented) lines
                                                          # with a space
 
@@ -83,7 +78,7 @@ class ITMLProcessor:
         #parsed = re.sub(r'\n', ' ', parsed)  # no ending whitespace
                                              # after \ and newline
 
-        return parsed if parsed else None  # empty string. Maybe we should let
+        return parsed #if parsed else None  # empty string. Maybe we should let
                                            # preprocessor do it's job in 
                                            # processing comments
 
