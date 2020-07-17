@@ -69,19 +69,22 @@ class ITMLPreprocessor:
 
                 if indent > 0:  # two subsequent newlines separate paragraphs
                                # when the text is indented
-                    groups[groupno].append(line_contents)
+                    groups[groupno] += line_contents
 
             # line has text
             elif line_indent == 0:
                 groupno += 1
-                groups.update({groupno: list() })
-                groups[groupno].append(line_contents)
+                #groups.update({groupno: list() })
+                #groups[groupno].append(line_contents)
+                groups.update({groupno: line_contents})
+                #groups[groupno].append(line_contents)
                 #indent = line_indent  # new indent
                 indent = 0  # new indent
 
             elif indent == 0 or line_indent == indent:
                 indent = line_indent  # new indent
-                groups[groupno].append(line_contents)
+                #groups[groupno].append(line_contents)
+                groups[groupno] += line_contents
 
             else:
                 print(f"Invalid indentation at line {lineno+1}.")
@@ -91,13 +94,36 @@ class ITMLPreprocessor:
         self.groupsno = len(groups)
 
         # TODO: THIS IS ALREADY THE ITMLPROCESSOR CODE
-        parsed = dict()
+#         parsed = dict()
+# 
+#         for key, value in self.groups.items():
+#             parsed.update({key: "".join(value)})
+# 
+#         self.parsed = parsed
+# 
+        self.item_list = list(self.groups.values())
+        self.parsed_list = list()
 
-        for key, value in self.groups.items():
-            parsed.update({key: "".join(value)})
 
-        self.parsed = parsed
+        for item in self.item_list:
 
+            parsed_paragraphs = re.split(r'\n\n+', item)  # split paragraphs
+
+            #parsed = str().join(map(lambda x: self._process_text(x),
+            #                            parsed_paragraphs))
+            parsed = tuple(map(lambda x: self._process_text(x),
+                               parsed_paragraphs))
+
+            #parsed = re.sub('', '', item)
+
+            self.parsed_list.append(parsed)
+
+
+    def _process_text(self, text):
+        parsed = re.sub('\\[ ]*\n', '', text)
+        parsed = re.sub('\n', ' ', parsed)
+
+        return parsed
 
     def _process_header(self):
 
