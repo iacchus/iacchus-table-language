@@ -3,14 +3,6 @@
 import re
 import shlex
 
-# class HtmlITMLPostProcessor(ITMLProcessor):
-# 
-# 
-#     def __init__():
-#         pass
-# 
-#     def process()
-# 
 table_root = """
 <table>
   <thead>
@@ -36,6 +28,22 @@ html_root = """
   </body>
 </html>
 """
+
+html_root_indent = 0
+table_root_indent = 4
+tr_root_indent = 4
+td_root_indent = 6
+
+
+def indent(text, size):
+
+    indent = ' ' * size
+    parsed = re.sub(r'^', f'{indent}', text, flags=re.MULTILINE)
+
+    return parsed.rstrip(' ')
+    #return parsed
+
+
 class HtmlITMLPostProcessor:
 
 
@@ -55,23 +63,32 @@ class HtmlITMLPostProcessor:
 
         columnsno = self.columnsno
 
+        cells = self.cells
+
         parsed = str()
         count = 1
 
-        for index, item in enumerate(self.cells):
+        for index, item in enumerate(cells):
 
             if index % columnsno == 0:
                 count = 1
-                tag = "<tr>\n{}\n"
+                parsed += indent("<tr>\n", tr_root_indent)
+                #tag = indent("<tr>\n{}", tr_root_indent)
+                #tag = indent("<tr>\n{}",tr_root_indent)
 
-            elif (index + 1) % columnsno == 0:
-                tag = "{}\n</tr>\n"
-            else:
-                tag = '{}\n'
+            parsed += self._process_body_cell(item)
 
-            parsed += tag.format(self._process_body_cell(item))
+            if (index + 1) % columnsno == 0 or cells[index] is cells[-1]:
+                #tag = indent("{}</tr>\n", tr_root_indent)
+                parsed += indent("</tr>\n", tr_root_indent)
+                #tag = indent("{}</tr>\n", tr_root_indent)
+            #else:
+            #    tag = '{}'
 
-        table_parsed = table_root.format(tbody=parsed)
+            #parsed += tag.format(self._process_body_cell(item))
+
+        table_parsed = indent(table_root.format(tbody=parsed),
+                              table_root_indent)
         html_parsed = html_root.format(body=table_parsed)
 
         self.output = html_parsed
@@ -79,9 +96,9 @@ class HtmlITMLPostProcessor:
         return self.output
 
 
-    def _process_header_cell(self):
-        return f"<th>{cell}</th>"
+    def _process_header_cell(self, cell):
+        return indent(f"<th>{cell}</th>\n", td_root_indent)
 
 
     def _process_body_cell(self, cell):
-        return f"<td>{cell}</td>"
+        return indent(f"<td>{cell}</td>\n", td_root_indent)
