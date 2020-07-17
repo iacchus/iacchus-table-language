@@ -40,36 +40,50 @@ class ITMLProcessor:
 
         for item in self.item_list:
 
+            parsed = self._process_text(item)
 
-            new_item = re.sub('\n\n+$', '', item)
             #print("ITEM:", item)
-            parsed_paragraphs = re.split(r'\n\n', new_item)  # split paragraphs
-            print("PARSED_PARAGRAPHS:", parsed_paragraphs)
+            #print("PARSED_PARAGRAPHS:", parsed_paragraphs)
 
-            parsed = tuple(self._process_text(x) for x in parsed_paragraphs)
+            # parsed = tuple(self._process_text(x) for x in parsed_paragraphs)
 
-            if parsed:
-                self.parsed_list.append(parsed)
+            split_paragraphs = re.split(r'\n\n', parsed)  # split paragraphs
+
+            self.parsed_list.append(tuple(split_paragraphs))
 
 
     def _process_text(self, text):
-        parsed = text
-        #parsed = re.sub(r'^[ ]*[#]+[.]*\n', '', parsed)
-        parsed = re.sub(r'^[\x20]*[#].*\n$', '', parsed)  # comments on empty
-                                                          # lines
 
-        parsed = re.sub(r'[ ]*[#].*\n', '\n', parsed)  # comments after
+        parsed = text
+
+        parsed = re.sub('[\n]*\n$', '', parsed)
+
+        #parsed = re.sub(r'^[ ]*[#]+[.]*\n', '', parsed)
+        parsed = re.sub(r'^[ ]*[#].*$', '', parsed, flags=re.MULTILINE)
+        # comments on empty lines
+
+        #parsed = re.sub(r'[ ]*[#].*\n', '\n', parsed)  # comments after
+        #                                               # lines with text
+        parsed = re.sub(r'[ ]*[#].*', '', parsed)  # comments after
                                                        # lines with text
 
-        parsed = re.sub(r'\n$', '', parsed)  # removing trailing newlines, as
+
+        #parsed = re.sub(r'\n', '', parsed)  # removing trailing newlines, as
                                              # paragraph strings are already
                                              # encapsulated in tuples
 
-        parsed = re.sub(r'\\[ ]*\n', '', parsed)  # no ending whitespace
-                                                  # after \ and newline
+        parsed = re.sub(r'\\[\x20]*\n', '', parsed)  # no ending whitespace
+                                                     # after \ and newline
 
-        parsed = re.sub(r'\n', ' ', parsed)  # no ending whitespace
+        parsed = re.sub(r'(?!\n\n|\n$)\n', ' ', parsed)  # join continuing
+                                                         # (indented) lines
+                                                         # with a space
+
+
+        #parsed = re.sub(r'\n', ' ', parsed)  # no ending whitespace
                                              # after \ and newline
 
-        return parsed
+        return parsed if parsed else None  # empty string. Maybe we should let
+                                           # preprocessor do it's job in 
+                                           # processing comments
 

@@ -28,8 +28,9 @@ proc = processor.ITMLProcessor(preproc)
 #print(proc.item_list)
 #print(proc.parsed_list)
 for item in proc.parsed_list:
+#for item in proc.item_list:
     pprint.pprint(item, width=170)
-    #print(repr(item))
+    # print(repr(item))
     #print(*[el for el in item], sep="\n‧‧‧‧")
     #print(*[el for el in item], sep="\n‧‧‧‧")
-    #print(*item)
+    #print(item)
