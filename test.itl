@@ -57,3 +57,7 @@ Talvez possamos criar variáveis e funcoes caso as tabelas sejam renderizadas
     localmente, e impedir certas características por segurança caso sejam
     renderizadas remotamente.
 # A especificação tera exigências e best-practices não-exigenciais.
+
+Aqui temos um
+comentario
+inline  # isto eh um comentário inline
