@@ -13,5 +13,6 @@ with open(FILENAME, "r") as fd:
 
 preproc = preprocessor.ITMLPreprocessor(text=lines)
 
-pprint.pprint(preproc.groups)
-
+#pprint.pprint(preproc.groups)
+#pprint.pprint(preproc.parsed)
+print(preproc.parsed)

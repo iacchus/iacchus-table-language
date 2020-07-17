@@ -58,8 +58,6 @@ class ITMLPreprocessor:
 
         for lineno, line in enumerate(lines):
 
-            #match = re.match(r'^(?P<blanks>[ ]*)(?P<text>[\w\W]*)(?P<newline>)', line)
-            #match = re.match(r'^(?P<blanks>[ ]*)(?P<text>[^\n]*)(?P<newline>)', line)
             match = re.match(r'^(?P<blanks>[ ]*)(?P<text>[\w\W]*)', line)
             matches = match.groupdict()
 
@@ -91,6 +89,14 @@ class ITMLPreprocessor:
 
         self.groups = groups
         self.groupsno = len(groups)
+
+        # TODO: THIS IS ALREADY THE ITMLPROCESSOR CODE
+        parsed = dict()
+
+        for key, value in self.groups.items():
+            parsed.update({key: "".join(value)})
+
+        self.parsed = parsed
 
 
     def _process_header(self):
