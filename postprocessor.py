@@ -3,7 +3,7 @@
 import re
 import shlex
 
-table_root = """
+table_root = """\
 <table>
   <thead>
     <tr>
@@ -13,7 +13,7 @@ table_root = """
   <tbody>
 {tbody}
   </tbody>
-</table>
+</table>\
 """
 
 html_root = """
@@ -94,7 +94,8 @@ class HtmlITMLPostProcessor:
             if (index + 1) % columnsno == 0 or cells[index] is cells[-1]:
                 tbody += indent("</tr>\n", tr_root_indent)
 
-        table_parsed = indent(table_root.format(thead=thead, tbody=tbody),
+        table_parsed = indent(table_root.format(thead=thead.strip('\n'),
+                                                tbody=tbody.strip('\n')),
                               table_root_indent)
         html_parsed = html_root.format(body=table_parsed)
 
