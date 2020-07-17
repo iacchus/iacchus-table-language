@@ -7,7 +7,7 @@ table_root = """
 <table>
   <thead>
     <tr>
-      <th colspan="2">The table header</th>
+{thead}
     </tr>
   </thead>
   <tbody>
@@ -20,8 +20,9 @@ html_root = """
 <!doctype html>
 <html lang=en>
   <head>
-    <meta charset=utf-8>
-    <title>blah</title>
+    <meta charset=utf-8 />
+    <title>Iacchus' Table Markup Language proof-of-concept</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
 {body}
@@ -62,32 +63,38 @@ class HtmlITMLPostProcessor:
     def process(self):
 
         columnsno = self.columnsno
+        header_columns = self.columns
 
         cells = self.cells
 
-        parsed = str()
-        count = 1
+
+        thead = str()
+
+        for index, item in enumerate(header_columns):
+
+            if index % columnsno == 0:
+                thead += indent("<tr>\n", tr_root_indent)
+
+            #paragraphs = self._process_paragraphs(item)
+            thead += self._process_header_cell(item)
+
+            if (index + 1) % columnsno == 0 or cells[index] is cells[-1]:
+                thead += indent("</tr>\n", tr_root_indent)
+
+        tbody = str()
 
         for index, item in enumerate(cells):
 
             if index % columnsno == 0:
-                count = 1
-                parsed += indent("<tr>\n", tr_root_indent)
-                #tag = indent("<tr>\n{}", tr_root_indent)
-                #tag = indent("<tr>\n{}",tr_root_indent)
+                tbody += indent("<tr>\n", tr_root_indent)
 
-            parsed += self._process_body_cell(item)
+            paragraphs = self._process_paragraphs(item)
+            tbody += self._process_body_cell(paragraphs)
 
             if (index + 1) % columnsno == 0 or cells[index] is cells[-1]:
-                #tag = indent("{}</tr>\n", tr_root_indent)
-                parsed += indent("</tr>\n", tr_root_indent)
-                #tag = indent("{}</tr>\n", tr_root_indent)
-            #else:
-            #    tag = '{}'
+                tbody += indent("</tr>\n", tr_root_indent)
 
-            #parsed += tag.format(self._process_body_cell(item))
-
-        table_parsed = indent(table_root.format(tbody=parsed),
+        table_parsed = indent(table_root.format(thead=thead, tbody=tbody),
                               table_root_indent)
         html_parsed = html_root.format(body=table_parsed)
 
@@ -102,3 +109,12 @@ class HtmlITMLPostProcessor:
 
     def _process_body_cell(self, cell):
         return indent(f"<td>{cell}</td>\n", td_root_indent)
+
+    def _process_paragraphs(self, cell):
+
+        paragraphs = str()
+        for paragraph in cell:
+            paragraphs += f"<p>{paragraph}</p>"
+
+        return paragraphs
+

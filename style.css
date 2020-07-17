@@ -1,0 +1,49 @@
+/*@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700|Old+Standard+TT:400,400i,700|Open+Sans+Condensed:300,300i,700|Oswald:200,300,400,500,600,700|Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Arimo:400,400i,700&subset=greek,latin-ext');*/
+/*@import url(https://fonts.googleapis.com/css?family=PT+Sans:400,400i,700,700i);*/
+@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i');
+/*@import url(https://fonts.googleapis.com/css?family=PT+Sans:400,400i,700,700i);*/
+
+* {
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%;
+  max-width: 100%;
+  margin: 2em 0;
+  background-color: transparent;
+  border: 0.1rem solid #e5e4e1;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+table th,
+table td {
+  position: relative;
+  padding: 0.5em;
+  line-height: 0.95em;
+  text-align: left;
+  border: 0.1rem solid #e5e4e1
+}
+
+table th {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  /*font-size: 0.75em;*/
+  line-height: 1.25em;
+  padding: 0.666em;
+  color: #000
+}
+
+table td:after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: -0.1rem;
+  top: -0.1rem;
+  padding: 0.1rem;
+  z-index: -1;
+  content: '';
+  background: #faf9f7
+}
+
