@@ -28,8 +28,8 @@ Porque a será entendido que a linha anterior possuia apenas uma linha,
     parecido com os heredocs """heredoc""" do Python.
 
     O texto da coluna anterior renderizará apenas uma linha com UM ESPAÇO, os
-    outros caracteres especiais como NEWLINE e MULTIPLOS ESPAÇOS sendo
-    reduzidos à apenas UM ESPEÇO, a não ser que a linha seja terminada com
+    outros caracteres especiais como NEWLINE e MÚLTIPLOS ESPAÇOS sendo
+    reduzidos à apenas UM ESPAÇO, a não ser que a linha seja terminada com
     barra, em cujo caso a linha anterior será unida com a linha atual sem adi\
     cionar QUALQUER ESPAÇO.
     

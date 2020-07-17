@@ -25,4 +25,6 @@ preproc = preprocessor.ITMLPreprocessor(text=lines)
 # for item in preproc.item_list:
 for item in preproc.parsed_list:
     #pprint.pprint(item, width=170)
-    print(repr(item))
+    #print(repr(item))
+    print(*[el for el in item], sep="\n‧‧‧‧")
+    #print(item)
