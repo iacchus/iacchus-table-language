@@ -29,7 +29,11 @@ class ITMLProcessor:
     def __init__(self, preprocessor):
 
         self.preprocessor = preprocessor
+
         self.process()
+
+        self.columnsno = self.preprocessor.columnsno
+        self.columns = self.preprocessor.columns
 
 
     def process(self):
@@ -38,14 +42,10 @@ class ITMLProcessor:
         self.parsed_list = list()
 
 
-        for item in self.item_list:
+        for index, item in enumerate(self.item_list):
+
 
             parsed = self._process_text(item)
-
-            #print("ITEM:", item)
-            #print("PARSED_PARAGRAPHS:", parsed_paragraphs)
-
-            # parsed = tuple(self._process_text(x) for x in parsed_paragraphs)
 
             split_paragraphs = re.split(r'\n\n', parsed)  # split paragraphs
 
@@ -56,29 +56,14 @@ class ITMLProcessor:
 
         parsed = text
 
+        # newlines at the end of string. They're already encapsulated
         parsed = re.sub(r'[\n]*\n$', '', parsed)
 
+        # no ending whitespace after \ and newline
+        parsed = re.sub(r'\\[\x20]*\n', '', parsed)
 
+        # join continuing (indented) lines with a space
+        parsed = re.sub(r'(?<=.)\n(?=.)', r' ', parsed)
 
-        #parsed = re.sub(r'\n', '', parsed)  # removing trailing newlines, as
-                                             # paragraph strings are already
-                                             # encapsulated in tuples
-
-        parsed = re.sub(r'\\[\x20]*\n', '', parsed)  # no ending whitespace
-                                                     # after \ and newline
-
-        #parsed = re.sub(r'(?!\n[\n]+|\n$)\n', '_', parsed,flags=re.MULTILINE)
-        #parsed = re.sub(r'^$', '_')
-        #parsed = re.sub(r'(.)\n(.)', r'\1 \2', parsed)  # join continuing
-        parsed = re.sub(r'(?<=.)\n(?=.)', r' ', parsed)  # join continuing
-                                                         # (indented) lines
-                                                         # with a space
-
-
-        #parsed = re.sub(r'\n', ' ', parsed)  # no ending whitespace
-                                             # after \ and newline
-
-        return parsed #if parsed else None  # empty string. Maybe we should let
-                                           # preprocessor do it's job in 
-                                           # processing comments
+        return parsed
 

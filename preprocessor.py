@@ -49,7 +49,7 @@ class ITMLPreprocessor:
         self.lines = lines
 
 
-        if not self._process_header:
+        if not self._process_header():
             raise('Not a legitimate ITML table (Header.) Exiting.')
 
         indent = 0
@@ -90,7 +90,8 @@ class ITMLPreprocessor:
                 groups[groupno] += parsed_line
 
             else:
-                print(f"Invalid indentation at line {lineno+1}.")
+                #print(f"Invalid indentation at line {lineno+1}.")
+                raise(f"Invalid indentation at line {lineno+1}.")
                 exit(2)
 
         self.groups = groups
@@ -100,10 +101,10 @@ class ITMLPreprocessor:
     def _process_header(self):
 
         if len(self.lines) > 0:
-            match = re.match(r'^itbl ([\w\W]*)', self.lines[0])
+            match = re.match(r'^itbl (.*)', self.lines[0])
 
-        if len(match.groups()) == 2:
-            self.columns = shlex.split(match[2])
+        if len(match.groups()) == 1:
+            self.columns = shlex.split(match[1])
             self.columnsno = len(self.columns)
 
         elif not match:
