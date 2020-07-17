@@ -24,12 +24,11 @@ proc = processor.ITMLProcessor(preproc)
 #print(preproc.parsed_list)
 #print(preproc.item_list)
 # pprint.pprint("\join"*[item for item in preproc.item_list])
-# for item in preproc.item_list:
-#print(proc.item_list)
-#print(proc.parsed_list)
-for item in proc.parsed_list:
-    pprint.pprint(item, width=170)
+#for item in preproc.item_list:
+for item in preproc.groups.values():
+#for item in proc.parsed_list:
+    #pprint.pprint(item, width=170)
     #print(repr(item))
     #print(*[el for el in item], sep="\n‧‧‧‧")
     #print(*[el for el in item], sep="\n‧‧‧‧")
-    #print(*item)
+    print(item)

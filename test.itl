@@ -13,13 +13,13 @@ Este é o comeco da coluna um
     e este é o tercero paragrafo
 
 Depois de um `dedent`, um espaço vazio, ou mais de um espaços vazios entre as
-    colunas é ignorado, sendo contado o número de collunas pelo tamanho de
+    colunas é ignorado, sendo contado o número de colunas pelo tamanho de
     colunas existentes no header.
 Então este seria a terceira coluna. O(s) espaço(s) depois de um `dedent`,
     apesar de ser aceitos, não são necessários.
 
 Uma especificação que temos em mente é o de utilizar a regra do python de que o
-    texto não deve ultrapassar 79 caracteres por llinha.
+    texto não deve ultrapassar 79 caracteres por linha.
 
 Caso o indent da próxima linha seja o indent 0 (sem indentação)
 ...o texto, aqui por exemplo, após o NEWLINE estará na próxima coluna.
@@ -61,3 +61,11 @@ Talvez possamos criar variáveis e funcoes caso as tabelas sejam renderizadas
 Aqui temos um
 comentario
 inline  # isto eh um comentário inline
+
+Este é um comentario
+    # este
+    entre linhas de um mesmo parágrafo
+    # como sera que eels se sairão?
+E esta é a proxima coluna # teste
+    e isso sua continuação. # ok?,  
+E Esta a terceira coluna

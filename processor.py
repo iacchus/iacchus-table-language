@@ -40,21 +40,36 @@ class ITMLProcessor:
 
         for item in self.item_list:
 
-            parsed_paragraphs = re.split(r'\n\n+', item)  # split paragraphs
+
+            new_item = re.sub('\n\n+$', '', item)
+            #print("ITEM:", item)
+            parsed_paragraphs = re.split(r'\n\n', new_item)  # split paragraphs
+            print("PARSED_PARAGRAPHS:", parsed_paragraphs)
 
             parsed = tuple(self._process_text(x) for x in parsed_paragraphs)
 
-            self.parsed_list.append(parsed)
+            if parsed:
+                self.parsed_list.append(parsed)
 
 
     def _process_text(self, text):
         parsed = text
         #parsed = re.sub(r'^[ ]*[#]+[.]*\n', '', parsed)
-        parsed = re.sub(r'[\x20]*[#].*', '', parsed)
-        parsed = re.sub(r'\\[ ]*\n', '', parsed)
-        #parsed = re.sub('\\', '\\', parsed)
-        #parsed = re.sub(r'\n', ' ', parsed)
-        #parsed = re.sub(r'\n', ' ', parsed)
+        parsed = re.sub(r'^[\x20]*[#].*\n$', '', parsed)  # comments on empty
+                                                          # lines
+
+        parsed = re.sub(r'[ ]*[#].*\n', '\n', parsed)  # comments after
+                                                       # lines with text
+
+        parsed = re.sub(r'\n$', '', parsed)  # removing trailing newlines, as
+                                             # paragraph strings are already
+                                             # encapsulated in tuples
+
+        parsed = re.sub(r'\\[ ]*\n', '', parsed)  # no ending whitespace
+                                                  # after \ and newline
+
+        parsed = re.sub(r'\n', ' ', parsed)  # no ending whitespace
+                                             # after \ and newline
 
         return parsed
 
