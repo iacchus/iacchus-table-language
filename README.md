@@ -12,7 +12,9 @@ Contents:
   - the header
   - the body
   - comments
-  - formatting
+  - formatting rules
+    - 79 max character width
+    - 2 or 4 spaces indentation without tabs
   - versioning
 
 ## Introduction: Why, and how?
@@ -85,7 +87,7 @@ made in empty lines or after text.
 Comment lines and inline comments are removed from the data at preprocessing
 time, so they don't get to the itml processor.
 
-## Formatting
+## Formatting rules
 
 One of the caracteristics which we have in mind as we develop the ITML-lang is
 readability from the very `itbl` source.
@@ -103,10 +105,14 @@ time and use.
 The ITBL format lines should have the maximum of 79 characters per line.
 Additional characters should be broken to the next line and indented.
 
+### 4 spaces indentation without tabs
+
 The ITBL format indentation should not use TAB, and should be indented with
 2 or 4 spaces, concisely. After pre-alpha we will see which case is better and
 change this documentation with the urging to use 2 or 4 spaces, which be
 better.
+
+### Empty line after n-columns cells
 
 The lines representing the cells of one row in the ITML format should have an
 empty line after the number of columns. Simple like this:
