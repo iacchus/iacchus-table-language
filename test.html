@@ -7,62 +7,17 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <table>
-      <thead>
-        <tr>
-        <tr>
-          <th>coluna 1</th>
-          <th>coluna 2</th>
-          <th>coluna3</th>
-          <th>coluna 4</th>
-          <th>coluna 5</th>
-        </tr>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><p>coluna 1</p></td>
-          <td><p>coluna 2</p></td>
-          <td><p>coluna3</p></td>
-          <td><p>coluna 4</p></td>
-          <td><p>coluna 5</p></td>
-        </tr>
-        <tr>
-          <td><p>Primeira linha de dados da coluna um</p></td>
-          <td><p>Aqui é a coluna 2</p></td>
-          <td><p>Isto está na coluna 3</p></td>
-          <td><p>Este é o comeco da coluna um e ela tem multiplos paragrafos, que são retornados como newlines. este é apenas o primeiro paragrafo</p><p>este é o segundo paragrafo da primeira coluna</p><p>e este é o tercero paragrafo</p></td>
-          <td><p>Depois de um `dedent`, um espaço vazio, ou mais de um espaços vazios entre as colunas é ignorado, sendo contado o número de colunas pelo tamanho de colunas existentes no header.</p></td>
-        </tr>
-        <tr>
-          <td><p>Então este seria a terceira coluna. O(s) espaço(s) depois de um `dedent`, apesar de ser aceitos, não são necessários.</p></td>
-          <td><p>Uma especificação que temos em mente é o de utilizar a regra do python de que o texto não deve ultrapassar 79 caracteres por linha.</p></td>
-          <td><p>Caso o indent da próxima linha seja o indent 0 (sem indentação)</p></td>
-          <td><p>...o texto, aqui por exemplo, após o NEWLINE estará na próxima coluna.</p></td>
-          <td><p>Porque a será entendido que a linha anterior possuia apenas uma linha, coerentemente. Esse indent renderizará apenas UMA linha com UM ESPAÇO, parecido com os heredocs """heredoc""" do Python.</p><p>O texto da coluna anterior renderizará apenas uma linha com UM ESPAÇO, os outros caracteres especiais como NEWLINE e MÚLTIPLOS ESPAÇOS sendo reduzidos à apenas UM ESPAÇO, a não ser que a linha seja terminada com barra, em cujo caso a linha anterior será unida com a linha atual sem adicionar QUALQUER ESPAÇO.</p></td>
-        </tr>
-        <tr>
-          <td><p>Para ser Future-proof, as especificações POSSIVELMENTE, ao menos ENQUANTO BETA, serão VERSIONADAS e suas implementações, no caso, deverão ser baseadas na VERSÃO do PADRÃO `itbl` `iacchus' table language.`</p></td>
-          <td><p>""</p></td>
-          <td><p>Um campo vazio pode ser representado por "". Talvez possamos usar "" para evitar a necessidade de indentação de uma célula. o \" literal pode ser escapado.</p></td>
-          <td><p>Uma linha com um comentário VAZIA ou contendo APENAS ESPAÇOS antes do comentário será descartada do parser.</p></td>
-          <td><p>Um comentário após uma linha com texto, descartará do caractere de comentário, inclusive, até o final da linha SEM RETIRAR O NEWLINE, que deverá ser interpretado posteriormente pelo PARSER.</p></td>
-        </tr>
-        <tr>
-          <td><p>Os comentários poderiam portanto ser vistos como</p></td>
-          <td><p>Linhas vazias são insignificantes, mas são uma boa prática para distinguir uma linha da tabela da outra.</p></td>
-          <td><p>Talvez, como no Markdown, caracteres específicos pudessem ter sentidos específicos.</p></td>
-          <td><p>Talvez possamos criar variáveis e funcoes caso as tabelas sejam renderizadas localmente, e impedir certas características por segurança caso sejam renderizadas remotamente.</p></td>
-          <td><p>Aqui temos um</p></td>
-        </tr>
-        <tr>
-          <td><p>comentario</p></td>
-          <td><p>inline</p></td>
-          <td><p>Este é um comentario entre linhas de um mesmo parágrafo</p></td>
-          <td><p>E esta é a proxima coluna e isso sua continuação.</p></td>
-          <td><p>E Esta a terceira coluna</p></td>
-        </tr>
-      </tbody>
-    </table>
+<table>
+  <thead>
+    <tr>
+    <tr>
+['      <th>coluna 1</th>\n', '      <th>coluna 2</th>\n', '      <th>coluna3</th>\n', '      <th>coluna 4</th>\n', '      <th>coluna 5</th>\n']    </tr>
+
+    </tr>
+  </thead>
+  <tbody>
+["    <tr>\n['      <th>Primeira linha de dados da coluna um</th>\\n', '      <th>Aqui é a coluna 2</th>\\n', '      <th>Isto está na coluna 3</th>\\n', '      <th>Este é o comeco da coluna um e ela tem multiplos paragrafos, que são retornados como newlines. este é apenas o primeiro paragrafoeste é o segundo paragrafo da primeira colunae este é o tercero paragrafo</th>\\n', '      <th>Depois de um `dedent`, um espaço vazio, ou mais de um espaços vazios entre as colunas é ignorado, sendo contado o número de colunas pelo tamanho de colunas existentes no header.</th>\\n']    </tr>\n", '    <tr>\n[\'      <th>Então este seria a terceira coluna. O(s) espaço(s) depois de um `dedent`, apesar de ser aceitos, não são necessários.</th>\\n\', \'      <th>Uma especificação que temos em mente é o de utilizar a regra do python de que o texto não deve ultrapassar 79 caracteres por linha.</th>\\n\', \'      <th>Caso o indent da próxima linha seja o indent 0 (sem indentação)</th>\\n\', \'      <th>...o texto, aqui por exemplo, após o NEWLINE estará na próxima coluna.</th>\\n\', \'      <th>Porque a será entendido que a linha anterior possuia apenas uma linha, coerentemente. Esse indent renderizará apenas UMA linha com UM ESPAÇO, parecido com os heredocs """heredoc""" do Python.O texto da coluna anterior renderizará apenas uma linha com UM ESPAÇO, os outros caracteres especiais como NEWLINE e MÚLTIPLOS ESPAÇOS sendo reduzidos à apenas UM ESPAÇO, a não ser que a linha seja terminada com barra, em cujo caso a linha anterior será unida com a linha atual sem adicionar QUALQUER ESPAÇO.</th>\\n\']    </tr>\n', '    <tr>\n["      <th>Para ser Future-proof, as especificações POSSIVELMENTE, ao menos ENQUANTO BETA, serão VERSIONADAS e suas implementações, no caso, deverão ser baseadas na VERSÃO do PADRÃO `itbl` `iacchus\' table language.`</th>\\n", \'      <th>""</th>\\n\', \'      <th>Um campo vazio pode ser representado por "". Talvez possamos usar "" para evitar a necessidade de indentação de uma célula. o \\\\" literal pode ser escapado.</th>\\n\', \'      <th>Uma linha com um comentário VAZIA ou contendo APENAS ESPAÇOS antes do comentário será descartada do parser.</th>\\n\', \'      <th>Um comentário após uma linha com texto, descartará do caractere de comentário, inclusive, até o final da linha SEM RETIRAR O NEWLINE, que deverá ser interpretado posteriormente pelo PARSER.</th>\\n\']    </tr>\n', "    <tr>\n['      <th>Os comentários poderiam portanto ser vistos como</th>\\n', '      <th>Linhas vazias são insignificantes, mas são uma boa prática para distinguir uma linha da tabela da outra.</th>\\n', '      <th>Talvez, como no Markdown, caracteres específicos pudessem ter sentidos específicos.</th>\\n', '      <th>Talvez possamos criar variáveis e funcoes caso as tabelas sejam renderizadas localmente, e impedir certas características por segurança caso sejam renderizadas remotamente.</th>\\n', '      <th>Aqui temos um</th>\\n']    </tr>\n", "    <tr>\n['      <th>comentario</th>\\n', '      <th>inline</th>\\n', '      <th>Este é um comentario entre linhas de um mesmo parágrafo</th>\\n', '      <th>E esta é a proxima coluna e isso sua continuação.</th>\\n', '      <th>E Esta a terceira coluna</th>\\n']    </tr>\n"]
+  </tbody>
+</table>
   </body>
 </html>

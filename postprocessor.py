@@ -129,7 +129,7 @@ class HtmlITMLPostProcessor:
         return html_table
 
     def _process_html(self, body):
-        html_full = TABLE_ROOT.format(body=body)
+        html_full = HTML_ROOT.format(body=body)
         return html_full
 
     def _process_header_cell(self, cell):
