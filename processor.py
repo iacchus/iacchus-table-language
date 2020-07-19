@@ -55,6 +55,13 @@ class Table:
 
         self.cells.append(cell)
 
+    def get_row(self, row):
+        columnsno = self.columnsno
+        requested_row = row * columnsno
+
+        row = [self.cells[cell+requested_row] for cell in range(columnsno)]
+        return row
+
     @property
     def rowsno(self):
         return len(self.cells) // self.columnsno
