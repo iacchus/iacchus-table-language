@@ -34,45 +34,60 @@ class Table:
 
         self.cells = list()
 
+        for header in self.columns:
+            self.new_cell(contents=(header,), header=True)
+
         if raw_data:
             self.raw_data = raw_data
 
-            for index, item in enumerate(raw_data):
+            for item in raw_data:
                 self.new_cell(contents=item)
 
+    def new_cell(self, contents, header=False):
+
+        cell_index = self.cell_index
+        columnsno = self.columnsno
+
+        cell_row, cell_column = divmod(cell_index, columnsno)
+        pos = tuple([cell_column, cell_row])
+
+        cell = Cell(pos=pos, contents=contents, header=header)
+
+        self.cells.append(cell)
+
+    @property
+    def rowsno(self):
+        return len(self.cells) // self.columnsno
+
+    @property
+    def cellsno(self):
+        return len(self.cells)
 
     @property
     def cell_index(self):
         return len(self.cells)
 
-
-    def new_cell(self, contents):
-
-        cell_index = len(self.cells)
-        columnsno = self.columnsno
-
-        cell_row, cell_column = divmod(cell_index, columnsno)
-        pos = (cell_column, cell_row)
-
-        cell = Cell(pos=pos, contents=contents)
-
-        self.cells.append(cell)
-
-
+    @property
     def does_cells_fill_table(self):
-
         does_it_fill = (len(self.cells) % self.columnsno == 0)
-
         return does_it_fill
+
+    def __repr__(self):
+
+        cols = self.columnsno
+        rows = self.rowsno
+        cellsno = self.cellsno
+
+        return f"<Table cols: {cols} rows: {rows} cellsno: {cellsno}>"
 
 
 class Cell:
 
-    def __init__(self, pos, contents):
-        print('CONTENTS',contents)
+    def __init__(self, pos, contents, header=False):
 
-        self.paragraphs = contents
         self.x, self.y = pos
+        self.paragraphs = contents
+        self.role = "body" if not header else "header"
 
     def __hash__(self):
         return (self.y + 1) * (self.x + 1)
@@ -86,7 +101,9 @@ class Cell:
         col = self.x
         row = self.y
         paragraphs = len(self.paragraphs)
-        return f"<cell col: {col} row: {row} paragraphs: {paragraphs}>"
+        role = self.role
+        return (f"<Cell col: {col} row: {row}"
+                f" paragraphs: {paragraphs} role {role}>")
 
 class ITMLProcessor:
 
