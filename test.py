@@ -16,7 +16,7 @@ preproc = preprocessor.ITMLPreprocessor(text=lines)
 proc = processor.ITMLProcessor(preproc.preprocessed_data)
 
 #print(preproc.preprocessed_data)
-print(proc.parsed_list)
+print(proc.processed_data)
 #for item in proc.parsed_list:
 #    pprint.pprint(item, width=160)
 #    print(item)

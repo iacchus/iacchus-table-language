@@ -27,12 +27,13 @@ HEADER_TAG = "itbl"
 
 class Table:
 
-    def __init__(self, columns, data=None):
+    def __init__(self, columns, raw_data=None):
 
         self.columns = columns
         self.columnsno = len(columns)
 
-        self.raw_data = data
+        if raw_data:
+            self.raw_data = raw_data
 
     @property
     def cellno(self):
@@ -60,6 +61,9 @@ class Cell:
         self.paragraphs = contents
         self.x, self.y = pos
 
+    def add_cell(self, cell):
+        pass
+
     def __hash__(self):
         # PLEASE CODE ME!!!
         # return (y+1) * (x+1)
@@ -75,20 +79,17 @@ class ITMLProcessor:
 
     def __init__(self, preprocessed_data):
 
-        self.data = preprocessed_data
+        #self.data = preprocessed_data
 
-        #columns = self._process_header(preprocessed_data)
+        columns, processed_data = self.process(preprocessed_data)
 
-        #self.columnsno = len(self.columns)
-
-        columns, data = self.process(preprocessed_data)
-
-        self.table = Table(columns=columns, data=data)
+        self.processed_data = processed_data
+        self.table = Table(columns=columns, raw_data=processed_data)
 
 
     def process(self, preprocessed_data):
 
-        parsed_data = list()
+        processed_data = list()
 
         header_already = False
         for item in preprocessed_data:
@@ -98,13 +99,13 @@ class ITMLProcessor:
                 header_already = True
                 continue
 
-            parsed_data = self._process_text(item)
+            parsed_item = self._process_text(item)
 
-            split_paragraphs = re.split(r'\n\n', parsed_data)  # split paragraphs
+            split_paragraphs = re.split(r'\n\n', parsed_item)  # split paragraphs
 
-            parsed_data.append(tuple(split_paragraphs))
+            processed_data.append(tuple(split_paragraphs))
 
-        return (columns, parsed_data)
+        return (columns, processed_data)
 
 
     def _process_text(self, text):
