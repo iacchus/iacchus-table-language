@@ -6,10 +6,10 @@ import shlex
 TABLE_ROOT = """\
 <table>
   <thead>
-{thead}
+{thead}\
   </thead>
   <tbody>
-{tbody}
+{tbody}\
   </tbody>
 </table>\
 """
