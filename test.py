@@ -12,7 +12,7 @@ FILENAME = "test.itl"
 with open(FILENAME, "r") as fd:
     lines = fd.readlines()
 
-preproc = preprocessor.ITMLPreprocessor(text=lines)
+preproc = preprocessor.ITMLPreProcessor(text=lines)
 proc = processor.ITMLProcessor(preproc.preprocessed_data)
 
 table = proc.table

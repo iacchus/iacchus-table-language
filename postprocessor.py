@@ -42,7 +42,7 @@ def indent(text, size):
     return parsed.rstrip(' ')
 
 
-class HtmlITMLPostprocessor:
+class HtmlITMLPostProcessor:
     """Example Postprocessor which translates a Table object to HTML.
 
     This is an example implementation of a postprocessor class which translates
