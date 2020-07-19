@@ -15,8 +15,11 @@ with open(FILENAME, "r") as fd:
 preproc = preprocessor.ITMLPreprocessor(text=lines)
 proc = processor.ITMLProcessor(preproc.preprocessed_data)
 
+table = proc.table
 #print(preproc.preprocessed_data)
-print(proc.processed_data)
+#print(proc.processed_data)
+print(table.cells)
 #for item in proc.parsed_list:
 #    pprint.pprint(item, width=160)
 #    print(item)
+

@@ -32,54 +32,66 @@ class Table:
         self.columns = columns
         self.columnsno = len(columns)
 
+        self.cells = list()
+
         if raw_data:
             self.raw_data = raw_data
 
+            for index, item in enumerate(raw_data):
+                self.new_cell(contents=item)
+
+
     @property
-    def cellno(self):
+    def cell_index(self):
         return len(self.cells)
 
-    def new_cell(self):
-        pass
+
+    def new_cell(self, contents):
+
+        cell_index = len(self.cells)
+        columnsno = self.columnsno
+
+        cell_row, cell_column = divmod(cell_index, columnsno)
+        pos = (cell_column, cell_row)
+
+        cell = Cell(pos=pos, contents=contents)
+
+        self.cells.append(cell)
+
 
     def does_cells_fill_table(self):
-        pass
+
+        does_it_fill = (len(self.cells) % self.columnsno == 0)
+
+        return does_it_fill
+
 
 class Cell:
 
     def __init__(self, pos, contents):
-
-#         if isinstance(contents, tuple):
-#             self.paragraphs = str
-#
-#         elif isinstance(contents, str):
-#             self.paragraphs = tuple(str)
-#
-#         elif isinstance(contents, list):
-#             self.paragraphs = tuple(str)
+        print('CONTENTS',contents)
 
         self.paragraphs = contents
         self.x, self.y = pos
 
-    def add_cell(self, cell):
-        pass
-
     def __hash__(self):
-        # PLEASE CODE ME!!!
-        # return (y+1) * (x+1)
-        pass
+        return (self.y + 1) * (self.x + 1)
 
     def __str__(self):
         # PLEASE CODE ME!!
         # Each paragraph + postprocessor-specific formatting
         pass
 
+    def __repr__(self):
+        col = self.x
+        row = self.y
+        paragraphs = len(self.paragraphs)
+        return f"<cell col: {col} row: {row} paragraphs: {paragraphs}>"
+
 class ITMLProcessor:
 
 
     def __init__(self, preprocessed_data):
-
-        #self.data = preprocessed_data
 
         columns, processed_data = self.process(preprocessed_data)
 
@@ -130,7 +142,7 @@ class ITMLProcessor:
         Processes the ITML table header and returns the columns.
         """
 
-        parsed_header = re.sub(f'^{HEADER_TAG}[ ]+', '', preprocessed_data[0])
+        parsed_header = re.sub(f'^{HEADER_TAG}[ ]+', '', preprocessed_data)
         parsed_header = re.sub(r'\n\n$', '', parsed_header)
         parsed_header = re.sub(r'\\[ ]*\n', '', parsed_header)
         parsed_header = re.sub(r'\n', ' ', parsed_header)
