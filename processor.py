@@ -3,29 +3,39 @@
 import re
 import shlex
 
-# preprocessor deals with sanitizing the input
-# preprocessor:
-#   checks for header
-#   preprocesses header
-#   removes the header line
-#   remove # comments
-#   remove empty lines
-#   checks for indentation
-#   delivers to parser a organized block to be processed
-#
-# parser deals with processing the sanitized input
-# parser:
-#   parses given the header info by preprocessor
-#   parses indentation
-#   parses especial characters
-#   mount the columns with the header data given to it
-
-# https://stackoverflow.com/questions/4020539/process-escape-sequences-in-a-string-in-python
 
 HEADER_TAG = "itbl"
 
 
 class Table:
+    """Implements a Table object, which contains the table's metadata.
+
+    This class implements a Table object, which contains the table metadata
+        which will further be usedd by the postprocessor to render the table
+        for the preprocessor's specific formatting language (html, markdown,
+        unicode etc.)
+    The Table object will be created after the processing process and have it's
+        `cells` attribute populated with the user input cells so to construct
+        the table.
+
+    Args:
+        columns (list of str): The list with the names of the columns.
+        raw_data (list of tuple of str): List of cells (tuple) containing
+            paragraphs (str) returned by the ITMLProcessor `process` method.
+            This is used to mount the table's metadata, and is not to be
+            misunderstood as the initial input raw data, but rather already
+            preprocessed and processed data.
+
+    Attributes:
+        columns (list of str): The list with the names of the columns.
+        columnsno (int): The number of columns in the table.
+        rowsno (int): The number of rows in the table.
+        cellsno (int): The number of `Cell`s in the table
+        cells (list of Cell): The list of `Cell`s in the table.
+        cell_index (int): The index of the new cell which will be added.
+        does_cells_fill_table (bool): If the cells fill table.
+
+    """
 
     def __init__(self, columns, raw_data=None):
 
