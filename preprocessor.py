@@ -22,7 +22,9 @@ import shlex
 
 # https://stackoverflow.com/questions/4020539/process-escape-sequences-in-a-string-in-python
 
+
 HEADER_TAG = "itbl"
+
 
 class ITMLPreprocessor:
 
@@ -31,11 +33,11 @@ class ITMLPreprocessor:
 
         if filename:
             with open(filename, "r") as fd:
-                text = fd.readlines()
+                text = fd.read()
 
         if text:
             self.text = text
-            self.process(text)
+            self.preprocessed_data = self.process(text)
 
 
     def process(self, text):
@@ -44,7 +46,6 @@ class ITMLPreprocessor:
             data = text.splitlines()
         elif isinstance(text, (list, tuple)):
             data = text
-
 
         lines = [line.expandtabs() for line in data]
         self.lines = lines
@@ -56,7 +57,7 @@ class ITMLPreprocessor:
             raise('Not a legitimate ITML table (Header.) Exiting.')
 
         indent = 0
-        groups = dict()
+        groups = list()
         groupno = 0
 
         for lineno, line in enumerate(lines):
@@ -68,13 +69,7 @@ class ITMLPreprocessor:
             line_contents = matches['text']
             blank_line = re.match('^[\n]$', line_contents)
 
-            # we should think on a better way of handling TABS then enforcing
-            # the user no not use it.
-            if re.match(r'\t', line_contents):
-                raise('TAB character at line {lineno+1}. Please use 4 spaces'
-                      ' instead of tab.')
-
-            # line is a comment; continue `for` loop
+            # line is a comment; continue `for` loop ignoring current line:
             if re.match(r'^[\x20]*[#].*\n$', line_contents):
                 continue
 
@@ -83,19 +78,26 @@ class ITMLPreprocessor:
 
             if blank_line:
 
-                if indent > 0:  # two subsequent newlines separate paragraphs
-                                # when the text is indented
+                # blank line. was the previous `indent` greater than indent 0?
+                # so let's keep it, because a newline between two indented
+                # blocks of text is used to separate paragraphs of the same
+                # cell:
+                if indent > 0:
                     groups[groupno] += parsed_line
 
-            # line has text and is not indented
+                # it is only a blank line; skip it:
+                else:
+                    continue
+
+            # line has text and it is not indented; start a new group
             elif line_indent == 0:
-                groupno += 1
-                groups.update({groupno: parsed_line})
+                groups.append(parsed_line)  # start a new group
+                groupno = len(groups) - 1  # set current group index
                 indent = 0  # new indent
 
-            # line is indented. was the previous line `indent` == 0 and this
-            # is an indented continuation of it?
-            # or this is a continuation of the previous already intended line
+            # line has text and is indented. was the previous line
+            # `indent` == 0 and this is an indented continuation of it?
+            # or this is a continuation of the previous already indented line
             # with the same indentation?
             elif indent == 0 or line_indent == indent:
                 indent = line_indent  # new indent
@@ -106,31 +108,13 @@ class ITMLPreprocessor:
             else:
                 raise(f"Invalid indentation at line {lineno+1}.")
 
-        self.groups_dict = groups
-        self.groups_list = list(groups.values())
-        self.groupsno = len(groups)
+        return groups
 
-        self._process_header(self.groups_list[0])
 
     def _check_header(self, line):
+        """Checks if the data stream header line is in a valid itml format."""
 
-        header_match = re.match('^{header_tag} '.format(header_tag=HEADER_TAG),
-                                line)
+        header_match = re.match(f'^{HEADER_TAG}[ ]+', line)
 
         return header_match
-
-    def _process_header(self, header):
-
-        parsed_header = re.sub(r'^{header_tag}[ ]+'.format(header_tag=
-                                                           HEADER_TAG),
-                               '', header)
-
-        parsed_header = re.sub(r'\n\n$', '', parsed_header)
-        parsed_header = re.sub(r'\\[ ]*\n', '', parsed_header)
-        parsed_header = re.sub(r'\n', ' ', parsed_header)
-
-        self.columns = shlex.split(parsed_header)
-        self.columnsno = len(self.columns)
-
-        return True
 

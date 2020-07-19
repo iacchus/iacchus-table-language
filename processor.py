@@ -22,30 +22,44 @@ import shlex
 
 # https://stackoverflow.com/questions/4020539/process-escape-sequences-in-a-string-in-python
 
+HEADER_TAG = "itbl"
+
+
+class Table:
+    columns = list()
+    columnsno = int()
+
+    def __init__(self):
+        pass
+
+class Cell:
+
+    pos = tuple()
+
+    def __init__(self):
+        pass
 
 class ITMLProcessor:
 
 
-    def __init__(self, preprocessor):
+    def __init__(self, preprocessed_data):
 
-        self.preprocessor = preprocessor
+        self.data = preprocessed_data
 
-        self.process()
+        self.columns = self._process_header(preprocessed_data)
+        self.columnsno = len(self.columns)
 
-        self.columnsno = self.preprocessor.columnsno
-        self.columns = self.preprocessor.columns
+        self.process(preprocessed_data)
 
 
-    def process(self):
+    def process(self, data):
 
-        self.item_list = list(self.preprocessor.groups_list)
         self.parsed_list = list()
 
-
-        for index, item in enumerate(self.item_list):
+        for index, item in enumerate(data):
 
             if index == 0:  # raw header line
-                continue
+                self._process_header(item)
 
             parsed = self._process_text(item)
 
@@ -65,7 +79,23 @@ class ITMLProcessor:
         parsed = re.sub(r'\\[\x20]*\n', '', parsed)
 
         # join continuing (indented) lines with a space
-        parsed = re.sub(r'(?<=.)\n(?=.)', r' ', parsed)
+        parsed = re.sub(r'(?<=.)\n(?=.)', ' ', parsed)
 
         return parsed
+
+
+    def _process_header(self, preprocessed_data):
+        """Processes the itml table header line(s)
+
+        Processes the ITML table header and returns the columns.
+        """
+
+        parsed_header = re.sub(f'^{HEADER_TAG}[ ]+', '', preprocessed_data[0])
+        parsed_header = re.sub(r'\n\n$', '', parsed_header)
+        parsed_header = re.sub(r'\\[ ]*\n', '', parsed_header)
+        parsed_header = re.sub(r'\n', ' ', parsed_header)
+
+        columns = shlex.split(parsed_header)
+
+        return columns
 

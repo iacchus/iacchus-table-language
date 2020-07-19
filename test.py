@@ -13,7 +13,8 @@ with open(FILENAME, "r") as fd:
     lines = fd.readlines()
 
 preproc = preprocessor.ITMLPreprocessor(text=lines)
-proc = processor.ITMLProcessor(preproc)
+proc = processor.ITMLProcessor(preproc.preprocessed_data)
 
-for item in proc.parsed_list:
-    pprint.pprint(item, width=160)
+print(preproc.preprocessed_data)
+#for item in proc.parsed_list:
+#    pprint.pprint(item, width=160)
