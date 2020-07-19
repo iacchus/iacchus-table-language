@@ -26,17 +26,48 @@ HEADER_TAG = "itbl"
 
 
 class Table:
-    columns = list()
-    columnsno = int()
 
-    def __init__(self):
+    def __init__(self, columns, data=None):
+
+        self.columns = columns
+        self.columnsno = len(columns)
+
+        self.raw_data = data
+
+    @property
+    def cellno(self):
+        return len(self.cells)
+
+    def new_cell(self):
+        pass
+
+    def does_cells_fill_table(self):
         pass
 
 class Cell:
 
-    pos = tuple()
+    def __init__(self, pos, contents):
 
-    def __init__(self):
+#         if isinstance(contents, tuple):
+#             self.paragraphs = str
+#
+#         elif isinstance(contents, str):
+#             self.paragraphs = tuple(str)
+#
+#         elif isinstance(contents, list):
+#             self.paragraphs = tuple(str)
+
+        self.paragraphs = contents
+        self.x, self.y = pos
+
+    def __hash__(self):
+        # PLEASE CODE ME!!!
+        # return (y+1) * (x+1)
+        pass
+
+    def __str__(self):
+        # PLEASE CODE ME!!
+        # Each paragraph + postprocessor-specific formatting
         pass
 
 class ITMLProcessor:
@@ -46,26 +77,34 @@ class ITMLProcessor:
 
         self.data = preprocessed_data
 
-        self.columns = self._process_header(preprocessed_data)
-        self.columnsno = len(self.columns)
+        #columns = self._process_header(preprocessed_data)
 
-        self.process(preprocessed_data)
+        #self.columnsno = len(self.columns)
+
+        columns, data = self.process(preprocessed_data)
+
+        self.table = Table(columns=columns, data=data)
 
 
-    def process(self, data):
+    def process(self, preprocessed_data):
 
-        self.parsed_list = list()
+        parsed_data = list()
 
-        for index, item in enumerate(data):
+        header_already = False
+        for item in preprocessed_data:
 
-            if index == 0:  # raw header line
-                self._process_header(item)
+            if not header_already:
+                columns = self._process_header(item)
+                header_already = True
+                continue
 
-            parsed = self._process_text(item)
+            parsed_data = self._process_text(item)
 
-            split_paragraphs = re.split(r'\n\n', parsed)  # split paragraphs
+            split_paragraphs = re.split(r'\n\n', parsed_data)  # split paragraphs
 
-            self.parsed_list.append(tuple(split_paragraphs))
+            parsed_data.append(tuple(split_paragraphs))
+
+        return (columns, parsed_data)
 
 
     def _process_text(self, text):
