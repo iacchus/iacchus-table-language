@@ -27,7 +27,16 @@ HEADER_TAG = "itbl"
 
 
 class ITMLPreprocessor:
+    """Processes a raw ITML input and returns data to be processed.
 
+    The preprocessor sanitizes input and modules it to be processed by the
+    ITML processor.
+
+    Attributes:
+        lines (list): The raw, not preprocessed, input data divided by lines.
+        preprocessed_data (list): A list of sanitized data ready to be passed
+            to the ITMLProcessor to be processed.
+    """
 
     def __init__(self, text=None, filename=None):
 
@@ -36,11 +45,18 @@ class ITMLPreprocessor:
                 text = fd.read()
 
         if text:
-            self.text = text
-            self.preprocessed_data = self.process(text)
+            self.load_text(text)
 
 
     def process(self, text):
+        """Sanitizes the raw ITML input.
+
+        Args:
+            text (str): a raw input in ITML format.
+
+        Returns:
+            list: A `list` ready to be passed to the ITML processor.
+            """
 
         if isinstance(text, str):
             data = text.splitlines()
@@ -117,4 +133,39 @@ class ITMLPreprocessor:
         header_match = re.match(f'^{HEADER_TAG}[ ]+', line)
 
         return header_match
+
+    def loads(self, text):
+        """Loas an ITML stream from a string.
+
+        Args:
+            text (str): the string in ITML format.
+        """
+
+        if isinstance(text, str):
+            self.load_text(text)
+        else:
+            raise('loads() expect a str() as `text` parameter.')
+
+        return True
+
+    def load(self, filename):
+        """Loads an ITML stream from a file.
+
+        Args:
+            text (str): the name of the file containing the text in ITML
+                format.
+        """
+
+        with open(filename, "r") as fd:
+            text = fd.read()
+
+        self.load_text(text)
+
+        return True
+
+    def load_text(self, text):
+
+        self.text = text
+        self.preprocessed_data = self.process(text)
+
 
