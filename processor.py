@@ -99,10 +99,10 @@ class Cell:
     def __hash__(self):
         return (self.y + 1) * (self.x + 1)
 
-    def __str__(self):
-        cell_str = str().join(self.paragraphs)
-
-        return cell_str
+    #def __str__(self):
+        #cell_str = str().join(self.paragraphs)
+        #
+        #return cell_str
 
     def __iter__(self):
         return iter(self.paragraphs)
