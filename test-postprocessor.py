@@ -16,7 +16,8 @@ with open(FILENAME, "r") as fd:
 
 preproc = preprocessor.ITMLPreprocessor(text=lines)
 proc = processor.ITMLProcessor(preproc.preprocessed_data)
-postproc = postprocessor.HtmlITMLPostProcessor(proc)
+table = proc.table
+postproc = postprocessor.HtmlITMLPostProcessor(table)
 
 print(postproc.output)
 

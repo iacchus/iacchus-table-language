@@ -48,23 +48,24 @@ def indent(text, size):
 class HtmlITMLPostProcessor:
 
 
-    def __init__(self, table):
+    def __init__(self, processor):
 
-        self.table = table
-#         self.columnsno = self.processor.columnsno
-#         self.columns = self.processor.columns
-#
-#         self.cells = self.processor.parsed_list
+        self.processor = processor
 
-        self.process(table)
+        self.columnsno = self.processor.columnsno
+        self.columns = self.processor.columns
+
+        self.cells = self.processor.parsed_list
+
+        self.process()
 
 
-    def process(self, table):
+    def process(self):
 
-        columnsno = table.columnsno
-        header_columns = table.columns
+        columnsno = self.columnsno
+        header_columns = self.columns
 
-        cells = table.cells
+        cells = self.cells
 
 
         thead = str()

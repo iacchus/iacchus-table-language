@@ -97,6 +97,9 @@ class Cell:
         # Each paragraph + postprocessor-specific formatting
         pass
 
+    def __iter__(self):
+        return iter(self.paragraphs)
+
     def __repr__(self):
         col = self.x
         row = self.y
