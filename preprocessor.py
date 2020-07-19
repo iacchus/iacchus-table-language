@@ -3,30 +3,11 @@
 import re
 import shlex
 
-# preprocessor deals with sanitizing the input
-# preprocessor:
-#   checks for header
-#   preprocesses header
-#   removes the header line
-#   remove # comments
-#   remove empty lines
-#   checks for indentation
-#   delivers to parser a organized block to be processed
-#
-# parser deals with processing the sanitized input
-# parser:
-#   parses given the header info by preprocessor
-#   parses indentation
-#   parses especial characters
-#   mount the columns with the header data given to it
-
-# https://stackoverflow.com/questions/4020539/process-escape-sequences-in-a-string-in-python
-
 
 HEADER_TAG = "itbl"
 
 
-class ITMLPreprocessor:
+class ITMLPreProcessor:
     """Processes a raw ITML input and returns data to be processed.
 
     The preprocessor sanitizes input and modules it to be processed by the
@@ -134,6 +115,7 @@ class ITMLPreprocessor:
 
         return header_match
 
+
     def loads(self, text):
         """Loas an ITML stream from a string.
 
@@ -147,6 +129,7 @@ class ITMLPreprocessor:
             raise('loads() expect a str() as `text` parameter.')
 
         return True
+
 
     def load(self, filename):
         """Loads an ITML stream from a file.
@@ -162,6 +145,7 @@ class ITMLPreprocessor:
         self.load_text(text)
 
         return True
+
 
     def load_text(self, text):
 

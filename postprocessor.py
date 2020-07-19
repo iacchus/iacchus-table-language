@@ -40,10 +40,14 @@ def indent(text, size):
     parsed = re.sub(r'^', f'{indent}', text, flags=re.MULTILINE)
 
     return parsed.rstrip(' ')
-    #return parsed
 
 
-class HtmlITMLPostProcessor:
+class HtmlITMLPostprocessor:
+    """Example Postprocessor which translates a Table object to HTML.
+
+    This is an example implementation of a postprocessor class which translates
+    our Table object into an html table inside a full HTML5 file.
+    """
 
 
     def __init__(self, table):
@@ -54,13 +58,6 @@ class HtmlITMLPostProcessor:
 
 
     def process(self, table):
-
-#         columnsno = table.columnsno
-#         header_columns = table.columns
-#
-#         cells = table.cells
-#         rowsno = table.rowsno
-
 
         header_row = self._process_header_row()
         body_rows = "".join([self._process_body_row(row=x)

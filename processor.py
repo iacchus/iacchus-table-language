@@ -11,12 +11,13 @@ class Table:
     """Implements a Table object, which contains the table's metadata.
 
     This class implements a Table object, which contains the table metadata
-        which will further be usedd by the postprocessor to render the table
-        for the preprocessor's specific formatting language (html, markdown,
-        unicode etc.)
+    which will further be usedd by the postprocessor to render the table
+    for the preprocessor's specific formatting language (html, markdown,
+    unicode etc.)
+
     The Table object will be created after the processing process and have it's
-        `cells` attribute populated with the user input cells so to construct
-        the table.
+    `cells` attribute populated with the user input cells so to construct
+    the table.
 
     Args:
         columns (list of str): The list with the names of the columns.
