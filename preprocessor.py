@@ -22,6 +22,7 @@ import shlex
 
 # https://stackoverflow.com/questions/4020539/process-escape-sequences-in-a-string-in-python
 
+HEADER_TAG = "itbl"
 
 class ITMLPreprocessor:
 
@@ -48,8 +49,10 @@ class ITMLPreprocessor:
         lines = [line.expandtabs() for line in data]
         self.lines = lines
 
+        if len(data) == 0:
+            raise('Input is empty.')
 
-        if not self._process_header():
+        if not self._check_header(lines[0]):
             raise('Not a legitimate ITML table (Header.) Exiting.')
 
         indent = 0
@@ -65,7 +68,13 @@ class ITMLPreprocessor:
             line_contents = matches['text']
             blank_line = re.match('^[\n]$', line_contents)
 
-            # line is a comment; continue for loop
+            # we should think on a better way of handling TABS then enforcing
+            # the user no not use it.
+            if re.match(r'\t', line_contents):
+                raise('TAB character at line {lineno+1}. Please use 4 spaces'
+                      ' instead of tab.')
+
+            # line is a comment; continue `for` loop
             if re.match(r'^[\x20]*[#].*\n$', line_contents):
                 continue
 
@@ -78,37 +87,50 @@ class ITMLPreprocessor:
                                 # when the text is indented
                     groups[groupno] += parsed_line
 
-            # line has text
+            # line has text and is not indented
             elif line_indent == 0:
                 groupno += 1
                 groups.update({groupno: parsed_line})
                 indent = 0  # new indent
 
+            # line is indented. was the previous line `indent` == 0 and this
+            # is an indented continuation of it?
+            # or this is a continuation of the previous already intended line
+            # with the same indentation?
             elif indent == 0 or line_indent == indent:
                 indent = line_indent  # new indent
-                #groups[groupno].append(parsed_line)
                 groups[groupno] += parsed_line
 
+            # line is indented but it's indentation is not equal the previous
+            # indented line(s)
             else:
-                #print(f"Invalid indentation at line {lineno+1}.")
                 raise(f"Invalid indentation at line {lineno+1}.")
-                exit(2)
 
-        self.groups = groups
+        self.groups_dict = groups
+        self.groups_list = list(groups.values())
         self.groupsno = len(groups)
 
+        self._process_header(self.groups_list[0])
 
-    def _process_header(self):
+    def _check_header(self, line):
 
-        if len(self.lines) > 0:
-            match = re.match(r'^itbl (.*)', self.lines[0])
+        header_match = re.match('^{header_tag} '.format(header_tag=HEADER_TAG),
+                                line)
 
-        if len(match.groups()) == 1:
-            self.columns = shlex.split(match[1])
-            self.columnsno = len(self.columns)
+        return header_match
 
-        elif not match:
-            return False
+    def _process_header(self, header):
+
+        parsed_header = re.sub(r'^{header_tag}[ ]+'.format(header_tag=
+                                                           HEADER_TAG),
+                               '', header)
+
+        parsed_header = re.sub(r'\n\n$', '', parsed_header)
+        parsed_header = re.sub(r'\\[ ]*\n', '', parsed_header)
+        parsed_header = re.sub(r'\n', ' ', parsed_header)
+
+        self.columns = shlex.split(parsed_header)
+        self.columnsno = len(self.columns)
 
         return True
 

@@ -9,8 +9,8 @@ Contents:
 
 - introduction: why and how?
 - specification
-  - the header
-  - the body
+  - the table header
+  - the table body
   - comments
   - formatting rules
     - 79 max character width
@@ -29,10 +29,10 @@ and state the cols in the first line, and the each subsequent line or lines, if
 we use indentation in an entry, or paragraphs if we use space between indented
 text of the same cell, will be the contents of a table cell.
 
-## The Header
+## The Table Header
 
 The first line of the stream contains the string `itbl` and the names of all
-columns of the table, using shell like escape, like this:
+columns of the table, using shell-like escape, like this:
 
 ```
 itbl "Column 1" Column\ 2 Column3
@@ -48,14 +48,14 @@ We are currently thinking on means of allowing extend the header in multiple
 lines so that we dont need to limit the column names to be declared in only one
 line.
 
-## The Body
+## The Table Body
 
 After the header, each new line with indentation 0 (not indented) will be
 treated as table cell.
 
 If the line needs to be broken in various lines, the line continuation will be
 syntatically representing by adding indentation to the broken lines, this is,
-by adding spaces before the caracters in the new broken lines. The amount of
+by adding spaces before the characters in the new broken lines. The amount of
 spaces if not actually enforced, but it is enforced that multiple indented
 lines have the same amount of spaces than the indented line before. Example:
 
@@ -66,7 +66,7 @@ This is the first column of the table, and we will break this line and indent,
     it, so that we dont break our formatting rule of not trespassing the number
     of 79 characters per line. See how the multiple lines indented have the
     same indentation: this is an enforced rule. If the number of spaces differ
-    from one to another, it is a bug and the itml file should not pass the
+    from one to other, it is a bug and the itml file should not pass the
     preprocessing phase.
 This is a cell in the second column. Now we are going to show that we do not
   need to have the same indentation as before, but we SHOULD always use the

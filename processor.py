@@ -38,7 +38,7 @@ class ITMLProcessor:
 
     def process(self):
 
-        self.item_list = list(self.preprocessor.groups.values())
+        self.item_list = list(self.preprocessor.groups_list)
         self.parsed_list = list()
 
 
